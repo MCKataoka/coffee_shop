@@ -151,7 +151,6 @@ def delete_drink(token, id):
     try:
         drink = Drink.query.filter(
             Drink.id == id).one_or_none()
-        print('Drink', drink)
         if drink is None:
             abort(404)
 

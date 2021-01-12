@@ -82,13 +82,11 @@ def get_token_auth_header():
 
 def check_permissions(permission, payload):
     if 'permissions' not in payload:
-        print('PROBLEM HERE 1')
         raise AuthError({
             'code': 'invalid_claims',
             'description': 'Permissions not included in JWT.'
         }, 400)
     if permission not in payload['permissions']:
-        print('PROBLEM HERE 2')
         raise AuthError({
             'code': 'unauthorized',
             'description': 'Permission not found.'
@@ -131,7 +129,6 @@ def verify_decode_jwt(token):
                 'e': key['e']
             }
     if rsa_key:
-        print('HELLO 1')
         try:
             payload = jwt.decode(
                 token,
@@ -143,14 +140,12 @@ def verify_decode_jwt(token):
 
             return payload
         except jwt.ExpiredSignatureError:
-            print('HELLO 2')
             raise AuthError({
                 'code': 'token_expired',
                 'description': 'Token expired.'
             }, 401)
 
         except jwt.JWTClaimsError:
-            print('HELLO 3')
             raise AuthError({
                 'code': 'invalid_claims',
                 'description': 'Incorrect claims. Please, check the audience and issuer.'
@@ -187,8 +182,6 @@ def requires_auth(permission=''):
                 payload = verify_decode_jwt(token)
             except:
                 abort(401)
-
-            print('CHECK PERMISSIONS', check_permissions(permission, payload))
 
             check_permissions(permission, payload)
 
